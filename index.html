@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>吉報位map | 予定に合わせて方位取りを自動化</title>
+    <meta
+      name="description"
+      content="吉報位mapは、カレンダー予定・生年月日・地図方位を組み合わせて、予定に間に合う方位取りを提案するiPhoneアプリです。"
+    />
+    <!-- OG / Social -->
+    <meta property="og:title" content="吉報位map | 予定に合わせて方位取りを自動化" />
+    <meta property="og:description" content="運動しながら運気も上げる。カレンダー・生年月日・地図を組み合わせて、予定に間に合う方位取りを提案するiPhoneアプリ。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="吉報位map" />
+    <meta name="twitter:description" content="運動しながら運気も上げる。予定地から逆算する、方位取りナビ。" />
+
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header" aria-label="Site header">
+      <a class="brand" href="#top" aria-label="吉報位map top">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>吉報位map</span>
+      </a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#features">機能</a>
+        <a href="#flow">流れ</a>
+        <a href="#privacy">安心設計</a>
+        <a href="#contact">お問い合わせ</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-compass" aria-hidden="true">
+          <div class="compass-ring"></div>
+          <div class="compass-cross"></div>
+        </div>
+        <div class="hero-overlay">
+          <p class="eyebrow">Calendar + Map + Notification</p>
+          <h1 id="hero-title">予定地から逆算する、方位取りナビ。</h1>
+          <p class="hero-copy">
+            吉報位mapは、カレンダーの目的地、生年月日からの九星診断、地図上の方位線、出発通知を組み合わせて、
+            当日の予定に間に合う方位取りを支えるiPhoneアプリです。
+          </p>
+          <div class="hero-actions" aria-label="Primary actions">
+            <a class="button primary" href="#flow">仕組みを見る</a>
+            <a class="button secondary" href="#features">機能を見る</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary-band" aria-label="Core value">
+        <div>
+          <strong>広告なし</strong>
+          <span>確認のたびに邪魔されない</span>
+        </div>
+        <div>
+          <strong>カレンダー必須</strong>
+          <span>出勤先が変わっても予定地を優先</span>
+        </div>
+        <div>
+          <strong>生年月日連動</strong>
+          <span>本命星・月命星を自動表示</span>
+        </div>
+        <div>
+          <strong>通知対応</strong>
+          <span>出発時間と移動再開を知らせる</span>
+        </div>
+      </section>
+
+      <section id="features" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">What it does</p>
+          <h2>方位取りを、予定管理の中に入れる。</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-icon">01</span>
+            <h3>カレンダー予定を目的地に</h3>
+            <p>
+              Google CalendarをiPhone標準カレンダーに同期していれば、場所付き予定を読み込み、保存した出勤先より当日の予定地を優先します。
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon">02</span>
+            <h3>生年月日から九星診断</h3>
+            <p>
+              生年月日を入力すると、本命星・月命星・最大吉方候補・吉方候補を自動表示します。
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon">03</span>
+            <h3>地図上で方位枠を確認</h3>
+            <p>
+              現在地または自宅を基準に、最大吉方・吉方の方位枠を地図に重ねて表示します。
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon">04</span>
+            <h3>最大吉方と吉方を色分け</h3>
+            <p>
+              最大吉方は赤、吉方は緑または紫で表示。地図でも方位盤でも、どの方位を使うべきかすぐ分かります。
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon">05</span>
+            <h3>Google Mapsへ接続</h3>
+            <p>
+              予定地までの移動確認はGoogle Mapsへ引き継ぎ可能。アプリ内では方位と出発目安に集中できます。
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon">06</span>
+            <h3>出発通知を設定</h3>
+            <p>
+              方位取りへ出る時間と、予定地へ向かう時間をローカル通知で知らせます。
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="flow" class="section split-section">
+        <div class="section-heading">
+          <p class="eyebrow">Daily flow</p>
+          <h2>朝に確認して、そのまま動ける。</h2>
+          <p>
+            アプリは「占断を見せて終わり」ではなく、実際に予定へ間に合う出発時刻まで落とし込みます。
+          </p>
+        </div>
+        <ol class="timeline">
+          <li>
+            <span>1</span>
+            <div>
+              <h3>カレンダーから次の予定を取得</h3>
+              <p>場所付き予定を読み込み、今日の目的地を決めます。</p>
+            </div>
+          </li>
+          <li>
+            <span>2</span>
+            <div>
+              <h3>生年月日と日付で方位を判定</h3>
+              <p>ユーザーの九星診断と選択日の方位盤を組み合わせます。</p>
+            </div>
+          </li>
+          <li>
+            <span>3</span>
+            <div>
+              <h3>地図上に方位線を表示</h3>
+              <p>最大吉方・吉方を色分けし、方位取り候補を見える化します。</p>
+            </div>
+          </li>
+          <li>
+            <span>4</span>
+            <div>
+              <h3>Google Mapsと通知で動ける形に</h3>
+              <p>予定地への移動確認はGoogle Mapsへ。出発時間と予定地へ向かう時間は通知します。</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section id="privacy" class="section quiet-section">
+        <div class="section-heading">
+          <p class="eyebrow">Privacy first</p>
+          <h2>生年月日・住所・予定を扱うから、控えめに。</h2>
+        </div>
+        <div class="privacy-grid">
+          <div>
+            <h3>現在地は常時保存しない</h3>
+            <p>現在地は方位と移動時間の計算に使い、保存するデータは最小限にします。</p>
+          </div>
+          <div>
+            <h3>Supabaseでプロフィール管理</h3>
+            <p>生年月日、自宅、よく使う場所、作成したプラン履歴を安全に保存する設計です。</p>
+          </div>
+          <div>
+            <h3>最終判断を押し付けない</h3>
+            <p>吉方位の流派差を前提に、ルールは差し替え可能な形で実装します。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section id="contact" class="section quiet-section">
+      <div class="section-heading">
+        <p class="eyebrow">Contact</p>
+        <h2>お問い合わせ</h2>
+      </div>
+      <div class="contact-grid">
+        <div>
+          <h3>サポート</h3>
+          <p>ご質問・ご要望・不具合報告はこちらへ。</p>
+          <a href="mailto:support@kippouimap.com" class="contact-link">support@kippouimap.com</a>
+        </div>
+        <div>
+          <h3>プライバシーポリシー</h3>
+          <p>個人情報の取扱いについてはプライバシーポリシーをご確認ください。</p>
+          <a href="#privacy" class="contact-link">安心設計を見る</a>
+        </div>
+        <div>
+          <h3>運営</h3>
+          <p>NEER, Inc.</p>
+          <a href="mailto:hello@kippouimap.com" class="contact-link">hello@kippouimap.com</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>吉報位map &copy; 2026 NEER, Inc.</span>
+      <nav class="footer-nav">
+        <a href="#privacy">プライバシー</a>
+        <a href="#contact">お問い合わせ</a>
+      </nav>
+    </footer>
+  </body>
+</html>
