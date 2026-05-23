@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>吉報位map — 運気と運動を、ひとつの道に。</title>
+<meta name="description" content="カレンダー予定・生年月日・地図方位を組み合わせて、予定に間に合う方位取りを提案するiPhoneアプリ。" />
+<meta property="og:title" content="吉報位map — 運気と運動を、ひとつの道に。" />
+<meta property="og:description" content="運動しながら運気も上げる。カレンダー・九星気学・地図を組み合わせた方位取りナビ。" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700;900&display=swap');
+
+:root {
+  --bg: #fafaf8;
+  --ink: #111;
+  --muted: #777;
+  --accent: #0d6b5c;
+  --accent-light: #e8f5f1;
+  --red: #c43e38;
+  --gold: #b8882a;
+  --white: #fff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans JP', -apple-system, 'Hiragino Sans', sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(20px, 5vw, 60px);
+  height: 64px;
+  background: rgba(250,250,248,0.7);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.nav-logo {
+  font-weight: 900; font-size: 18px;
+  display: flex; align-items: center; gap: 10px;
+  letter-spacing: -0.02em;
+}
+
+.nav-logo::before {
+  content: '';
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--red), var(--gold), var(--accent), var(--red));
+}
+
+.nav-links { display: flex; gap: 32px; font-size: 13px; font-weight: 500; color: var(--muted); }
+.nav-links a { transition: color 0.3s; }
+.nav-links a:hover { color: var(--ink); }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background: #0a1f1a;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(13,107,92,0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 20%, rgba(196,62,56,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 50% at 20% 70%, rgba(184,136,42,0.10) 0%, transparent 60%);
+  animation: heroPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes heroPulse {
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+.hero-compass {
+  position: absolute;
+  width: clamp(400px, 50vw, 700px);
+  height: clamp(400px, 50vw, 700px);
+  opacity: 0.06;
+  animation: compassSpin 120s linear infinite;
+}
+
+@keyframes compassSpin { to { transform: rotate(360deg); } }
+
+.compass-ring {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.3);
+  background: conic-gradient(
+    from 0deg,
+    var(--red) 0deg 45deg, var(--gold) 45deg 90deg,
+    var(--accent) 90deg 135deg, #ccc 135deg 180deg,
+    var(--accent) 180deg 225deg, var(--gold) 225deg 270deg,
+    var(--red) 270deg 315deg, #ccc 315deg 360deg
+  );
+  mask: radial-gradient(circle, transparent 36%, black 37%, black 96%, transparent 97%);
+  -webkit-mask: radial-gradient(circle, transparent 36%, black 37%, black 96%, transparent 97%);
+}
+
+.compass-lines { position: absolute; inset: 0; }
+.compass-lines::before, .compass-lines::after {
+  content: ''; position: absolute; background: rgba(255,255,255,0.2);
+}
+.compass-lines::before { top: 0; left: 50%; width: 1px; height: 100%; }
+.compass-lines::after { top: 50%; left: 0; width: 100%; height: 1px; }
+
+.hero-content {
+  position: relative; z-index: 2;
+  max-width: 800px; padding: 0 24px;
+}
+
+.hero-label {
+  display: inline-block;
+  padding: 6px 16px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 100px;
+  font-size: 12px; font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  animation: fadeUp 1s 0.2s both;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 7vw, 72px);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin-bottom: 24px;
+  animation: fadeUp 1s 0.4s both;
+}
+
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--gold), #e8c96a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: clamp(15px, 2vw, 19px);
+  color: rgba(255,255,255,0.55);
+  font-weight: 300;
+  max-width: 540px;
+  margin: 0 auto 40px;
+  line-height: 1.8;
+  animation: fadeUp 1s 0.6s both;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center; gap: 8px;
+  padding: 16px 36px;
+  background: var(--white);
+  color: var(--ink);
+  border-radius: 100px;
+  font-size: 15px; font-weight: 700;
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: fadeUp 1s 0.8s both;
+}
+
+.hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.hero-cta::after { content: ' \2193'; font-size: 18px; }
+
+.hero-scroll {
+  position: absolute; bottom: 40px; left: 50%;
+  transform: translateX(-50%);
+  width: 1px; height: 60px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── REVEAL ── */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── SECTIONS ── */
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(80px, 12vw, 160px) 24px;
+}
+
+.section-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: clamp(26px, 4vw, 44px);
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+.section-desc {
+  color: var(--muted);
+  font-size: 16px;
+  max-width: 560px;
+  font-weight: 300;
+}
+
+/* ── CONCEPT ── */
+.concept { text-align: center; }
+.concept .section-title { max-width: 700px; margin-left: auto; margin-right: auto; }
+.concept .section-desc { margin-left: auto; margin-right: auto; }
+
+.concept-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px; margin-top: 64px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 16px; overflow: hidden;
+}
+
+.concept-stat {
+  padding: 40px 24px;
+  background: var(--bg);
+  text-align: center;
+}
+
+.concept-stat strong {
+  display: block;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1; margin-bottom: 8px;
+}
+
+.concept-stat span { font-size: 13px; color: var(--muted); font-weight: 500; }
+
+/* ── FEATURES ── */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px; margin-top: 56px;
+}
+
+.feature-item {
+  padding: clamp(28px, 4vw, 48px);
+  background: var(--white);
+  border-radius: 20px;
+  border: 1px solid rgba(0,0,0,0.04);
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s;
+}
+
+.feature-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+}
+
+.feature-num {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 13px; font-weight: 900;
+  margin-bottom: 20px;
+}
+
+.feature-item h3 {
+  font-size: 20px; font-weight: 700;
+  margin-bottom: 10px; letter-spacing: -0.01em;
+}
+
+.feature-item p {
+  color: var(--muted);
+  font-size: 14px; font-weight: 300; line-height: 1.8;
+}
+
+/* ── FLOW ── */
+.flow {
+  background: var(--ink);
+  color: var(--white);
+  max-width: 100%;
+  padding-left: 0; padding-right: 0;
+}
+
+.flow-inner {
+  max-width: 1100px;
+  margin: 0 auto; padding: 0 24px;
+}
+
+.flow .section-label { color: var(--gold); }
+.flow .section-desc { color: rgba(255,255,255,0.45); }
+
+.flow-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px; margin-top: 64px;
+  counter-reset: step;
+}
+
+.flow-step {
+  padding: 36px 24px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 16px;
+  counter-increment: step;
+  transition: background 0.3s;
+}
+
+.flow-step:hover { background: rgba(255,255,255,0.08); }
+
+.flow-step::before {
+  content: counter(step, decimal-leading-zero);
+  display: block;
+  font-size: 48px; font-weight: 900;
+  letter-spacing: -0.04em;
+  color: rgba(255,255,255,0.08);
+  margin-bottom: 20px; line-height: 1;
+}
+
+.flow-step h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+.flow-step p { font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 300; line-height: 1.8; }
+
+/* ── PRIVACY ── */
+.privacy-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px; margin-top: 56px;
+}
+
+.privacy-item h3 {
+  font-size: 17px; font-weight: 700;
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.privacy-item h3::before {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.privacy-item p {
+  font-size: 14px; color: var(--muted);
+  font-weight: 300; padding-left: 16px;
+}
+
+/* ── CONTACT ── */
+.contact {
+  text-align: center;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.contact-links {
+  display: flex; justify-content: center;
+  gap: 48px; margin-top: 40px; flex-wrap: wrap;
+}
+
+.contact-links a {
+  font-size: 15px; font-weight: 500;
+  color: var(--accent);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.contact-links a:hover { border-color: var(--accent); }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 40px 24px;
+  font-size: 12px; color: var(--muted);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .concept-stats,
+  .features-grid,
+  .privacy-list { grid-template-columns: 1fr; }
+  .flow-steps { grid-template-columns: 1fr; }
+  .contact-links { flex-direction: column; gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="#top">吉報位map</a>
+  <div class="nav-links">
+    <a href="#concept">Concept</a>
+    <a href="#features">Features</a>
+    <a href="#flow">Flow</a>
+    <a href="#privacy">Privacy</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-compass">
+    <div class="compass-ring"></div>
+    <div class="compass-lines"></div>
+  </div>
+  <div class="hero-content">
+    <span class="hero-label">iPhone App — Coming Soon</span>
+    <h1>運気と運動を、<br><em>ひとつの道</em>に。</h1>
+    <p class="hero-sub">カレンダー予定と九星気学を組み合わせて、<br>予定に間に合う方位取りルートを提案する。</p>
+    <a class="hero-cta" href="#concept">詳しく見る</a>
+  </div>
+  <div class="hero-scroll"></div>
+</section>
+
+<section class="section concept" id="concept">
+  <div class="reveal">
+    <p class="section-label">Concept</p>
+    <h2 class="section-title">方位取りを、生活導線の中に。</h2>
+    <p class="section-desc">吉報位mapは「占断を見せて終わり」のアプリではありません。実際の予定に間に合う出発時刻まで落とし込み、動ける形にします。</p>
+  </div>
+  <div class="concept-stats reveal">
+    <div class="concept-stat"><strong>0</strong><span>広告表示</span></div>
+    <div class="concept-stat"><strong>9</strong><span>九星自動判定</span></div>
+    <div class="concept-stat"><strong>&infin;</strong><span>流派差し替え可能</span></div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="reveal">
+    <p class="section-label">Features</p>
+    <h2 class="section-title">予定管理と方位取りを、<br>ひとつに。</h2>
+    <p class="section-desc">iPhone標準カレンダー・Google Maps・ローカル通知と連携。</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-item reveal"><span class="feature-num">01</span><h3>カレンダー予定を目的地に</h3><p>場所付き予定を読み込み、保存した出勤先より当日の予定地を優先します。</p></div>
+    <div class="feature-item reveal"><span class="feature-num">02</span><h3>生年月日から九星診断</h3><p>本命星・月命星・最大吉方候補・吉方候補を自動表示します。</p></div>
+    <div class="feature-item reveal"><span class="feature-num">03</span><h3>地図上に方位枠を表示</h3><p>現在地または自宅を基準に、最大吉方・吉方を色分けして重ねます。</p></div>
+    <div class="feature-item reveal"><span class="feature-num">04</span><h3>Google Mapsへ接続</h3><p>移動確認はGoogle Mapsへ引き継ぎ。方位と出発目安に集中できます。</p></div>
+    <div class="feature-item reveal"><span class="feature-num">05</span><h3>最大吉方と吉方を色分け</h3><p>最大吉方は赤、吉方は緑。地図でも方位盤でも、すぐ判別できます。</p></div>
+    <div class="feature-item reveal"><span class="feature-num">06</span><h3>出発通知を設定</h3><p>方位取りへ出る時間と、予定地へ向かう時間をローカル通知で知らせます。</p></div>
+  </div>
+</section>
+
+<section class="section flow" id="flow">
+  <div class="flow-inner">
+    <div class="reveal">
+      <p class="section-label">Daily Flow</p>
+      <h2 class="section-title">朝、開いて、そのまま動く。</h2>
+      <p class="section-desc">確認から出発まで、4ステップ。</p>
+    </div>
+    <div class="flow-steps">
+      <div class="flow-step reveal"><h3>予定を取得</h3><p>場所付き予定を読み込み、今日の目的地を決めます。</p></div>
+      <div class="flow-step reveal"><h3>方位を判定</h3><p>九星診断と当日の方位盤を組み合わせます。</p></div>
+      <div class="flow-step reveal"><h3>地図に表示</h3><p>最大吉方・吉方を色分けし、候補を見える化します。</p></div>
+      <div class="flow-step reveal"><h3>通知で出発</h3><p>出発時間と予定地へ向かう時間を通知します。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="privacy">
+  <div class="reveal">
+    <p class="section-label">Privacy</p>
+    <h2 class="section-title">個人データは、控えめに。</h2>
+    <p class="section-desc">生年月日・住所・予定を扱うから、慎重な設計を。</p>
+  </div>
+  <div class="privacy-list">
+    <div class="privacy-item reveal"><h3>位置情報は常時保存しない</h3><p>方位と移動時間の計算にだけ使い、保存は最小限にします。</p></div>
+    <div class="privacy-item reveal"><h3>安全なプロフィール管理</h3><p>生年月日、自宅、よく使う場所を暗号化して保存する設計です。</p></div>
+    <div class="privacy-item reveal"><h3>流派ルールは差し替え可能</h3><p>吉方位の流派差を前提に、特定の解釈を押し付けません。</p></div>
+  </div>
+</section>
+
+<section class="section contact" id="contact">
+  <div class="reveal">
+    <p class="section-label">Contact</p>
+    <h2 class="section-title">お問い合わせ</h2>
+    <p class="section-desc" style="margin:0 auto">ご質問・ご要望・不具合報告はこちらへ。</p>
+    <div class="contact-links">
+      <a href="mailto:support@kippouimap.com">support@kippouimap.com</a>
+      <a href="mailto:hello@kippouimap.com">hello@kippouimap.com</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">吉報位map &copy; 2026 NEER, Inc.</footer>
+
+<script>
+const o=new IntersectionObserver(e=>{e.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);o.unobserve(e.target)}})},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(e=>o.observe(e));
+</script>
+</body>
+</html>
